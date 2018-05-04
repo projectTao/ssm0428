@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ltt.mapper.EdocEntryMapper" >
+  <resultMap id="BaseResultMap" type="com.ltt.model.EdocEntry" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="category_id" property="categoryId"/>
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="summary" property="summary" jdbcType="VARCHAR" />
+    <result column="upload_user" property="uploadUser" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, category_id, title, summary, upload_user, create_date
+  </sql>
+  <select id="findAllEntry" resultMap="BaseResultMap">
+    SELECT t1.id, t1.title, t1.summary, t1.upload_user, t1.create_date
+    FROM edoc_entry t1
+    ORDER BY t1.id
+    DESC
+  </select>
+  <select id="CategoryIdByEntry" resultMap="BaseResultMap">
+    SELECT t1.id, t1.title, t1.summary, t1.upload_user, t1.create_date
+    FROM edoc_entry t1
+    <where>
+      <if test="CategoryId != null">
+        AND t1.category_id = #{CategoryId}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from edoc_entry
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from edoc_entry
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.ltt.model.EdocEntry" >
+    insert into edoc_entry (id, category_id, title, 
+      summary, upload_user, create_date
+      )
+    values (#{id,jdbcType=BIGINT}, #{categoryId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
+      #{summary,jdbcType=VARCHAR}, #{uploadUser,jdbcType=VARCHAR}, #{createDate,jdbcType=DATE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ltt.model.EdocEntry" >
+    insert into edoc_entry
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="categoryId != null" >
+        category_id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="summary != null" >
+        summary,
+      </if>
+      <if test="uploadUser != null" >
+        upload_user,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="categoryId != null" >
+        #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="summary != null" >
+        #{summary,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadUser != null" >
+        #{uploadUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective"  parameterType="com.ltt.model.EdocEntry">
+    update edoc_entry
+    <set >
+      <if test="categoryId != null" >
+        category_id = #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="summary != null" >
+        summary = #{summary,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadUser != null" >
+        upload_user = #{uploadUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=DATE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ltt.model.EdocEntry" >
+    update edoc_entry
+    set category_id = #{categoryId,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
+      summary = #{summary,jdbcType=VARCHAR},
+      upload_user = #{uploadUser,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=DATE}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
